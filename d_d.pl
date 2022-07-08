@@ -65,7 +65,9 @@ solve_puzzle(Code) :-
 
 
 start :-
-    solve_puzzle("f.1").
+    solve_puzzle("f.1"),
+    solve_puzzle("1.1"),
+    halt.
 
 
 puzzle("f.1", "adventurer's guide",
