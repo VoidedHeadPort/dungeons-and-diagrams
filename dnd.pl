@@ -17,7 +17,8 @@ maplist_length(Length,List) :-
 
 % count(Element, Count, List)
 % Count & fill List with the Element - unbound items will be filled with '_'
-%count(w,10,[w,w,w,w,w,w,w,w,w,w]).
+count(E,10,[E,E,E,E,E,E,E,E,E,E]) :-
+    !.
 
 count(_,0,[]) :-
     !.
@@ -37,7 +38,7 @@ build_mega_board(RowCounts,ColCounts,Board,MegaRowCounts,MegaColCounts,MegaBoard
     build_mega_row_counts(ColCounts,MegaColCounts),
     length(MegaColCounts,NumMegaCols),
     length(WallRow,NumMegaCols),
-    count(w,WallRow,NumMegaCols),
+    count(w,NumMegaCols,WallRow),
     build_mega_rows(Board,MegaRows),
     append([WallRow|MegaRows],[WallRow],MegaBoard).
 
