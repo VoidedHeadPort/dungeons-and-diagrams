@@ -22,7 +22,7 @@ fill(Element,[Element|Rest]) :-
     fill(Element,Rest).
 
 % count(Element, Count, List)
-% Count & fill List with the Element - unbound items will be filled with '_'
+% Count & fill List with the Element - unbound items will be filled with 's'
 count(Element,Count,List) :-
     length(List,Count),
     fill(Element,List),
@@ -34,7 +34,7 @@ count(Element,Count,[Element|Rest]) :-
     succ(RestCount,Count),
     count(Element,RestCount,Rest).
 
-count(Element,Count,['_'|Rest]) :-
+count(Element,Count,[s|Rest]) :-
     count(Element,Count,Rest).
 
 
@@ -93,7 +93,7 @@ print_row([Element|Elements]) :-
 
 print_element(Element) :-
     var(Element),
-    write('_'),
+    write(s),
     !.
 
 print_element(Element) :-
