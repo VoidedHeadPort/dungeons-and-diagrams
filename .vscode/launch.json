@@ -5,15 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Prolog Files",
+            "name": "solve_puzzle",
             "type": "prolog",
             "request": "launch",
             "runtimeExecutable": "C:\\Program Files\\swipl\\bin\\swipl.exe",
             "runtimeArgs": [],
             "env": {},
-            "program": "d_d.pl",
+            "program": "dnd.pl",
             "cwd": "${workspaceFolder}",
-            "startupQuery": "start",
+            "startupQuery": "solve_puzzle('${input:puzzle}')",
             "stopOnEntry": true,
             "traceCmds": {
                 "continue": [
@@ -33,6 +33,18 @@
                     "u"
                 ]
             }
+        }
+    ],
+    "inputs": [
+        {
+            "type": "pickString",
+            "id": "puzzle",
+            "description": "Which puzzle code do you want to solve?",
+            "options": [
+                "f.1",
+                "1.1"
+            ],
+            "default": "f.1"
         }
     ]
 }
