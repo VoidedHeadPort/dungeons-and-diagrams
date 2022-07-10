@@ -55,6 +55,15 @@ test(count_10_w_0) :-
     count(w,0,Row),
     Row = ['_','_','_','_','_','_','_','_','_','_'].
 
+test(count_8_w_8) :-
+    Row = [_,_,_,_,_,_,_,_],
+    count(w,8,Row),
+    Row = [w,w,w,w,w,w,w,w].
+
+test(count_8_w_0) :-
+    Row = [_,_,_,_,_,_,_,_],
+    count(w,0,Row),
+    Row = ['_','_','_','_','_','_','_','_'].
 
 :- end_tests(count).
 

@@ -15,12 +15,17 @@ maplist_length(Length,List) :-
     length(List,Length).
 
 
-% count(Element, Count, List)
-% Count & fill List with the Element - unbound items will be filled with '_'
-count(E,10,[E,E,E,E,E,E,E,E,E,E]) :-
+fill(_,[]) :-
     !.
 
-count(_,0,[]) :-
+fill(Element,[Element|Rest]) :-
+    fill(Element,Rest).
+
+% count(Element, Count, List)
+% Count & fill List with the Element - unbound items will be filled with '_'
+count(Element,Count,List) :-
+    length(List,Count),
+    fill(Element,List),
     !.
 
 count(Element,Count,[Element|Rest]) :-
