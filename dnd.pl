@@ -1,8 +1,21 @@
 dnd(RowCounts,ColCounts,Board) :-
     length(RowCounts,NumRows),
     length(ColCounts,NumCols),
-    build_board(NumRows,NumCols,Board).
-    %build_mega_board(RowCounts,ColCounts,Board,MegaRowCounts,MegaColCounts,MegaBoard),
+    build_board(NumRows,NumCols,Board),
+    build_mega_board(RowCounts,ColCounts,Board,_MegaRowCounts,_MegaColCounts,_MegaBoard).
+    % Build columns out of the Board (instead of rows)
+    % Sum the number of used cells (or potential wall combos) [chests use 3 cells]
+    % Sort by the least options to most options (combine rows & columns and their counts)
+    % Fill in rows (& columns) with w & s, decrementing count for each w [count(w,Count,List)]
+    % Work through the MegaBoard. Use corners at:
+    % [0,0], [0,1], [0,1], etc
+    % [1,0], [1,1], etc
+    % [2,0], etc
+    % - Some of these rules could be applied before filling the rows (& columns)
+    %   For example, I often try to fill out the chest room before rows
+    % - 5x5 rule for chests
+    % - 3x3 rule for monsters (and invalid dead ends)
+    % - 2x2 rule for invalid corridors
 
 
 build_board(NumRows,NumCols,Board) :-
