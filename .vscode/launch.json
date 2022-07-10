@@ -33,7 +33,67 @@
                     "u"
                 ]
             }
-        }
+        },
+        {
+            "name": "run_tests/0",
+            "type": "prolog",
+            "request": "launch",
+            "runtimeExecutable": "C:\\Program Files\\swipl\\bin\\swipl.exe",
+            "runtimeArgs": [],
+            "env": {},
+            "program": "dnd.plt",
+            "cwd": "${workspaceFolder}",
+            "startupQuery": "run_tests",
+            "stopOnEntry": true,
+            "traceCmds": {
+                "continue": [
+                    "leap",
+                    "l"
+                ],
+                "stepover": [
+                    "skip",
+                    "s"
+                ],
+                "stepinto": [
+                    "creep",
+                    "c"
+                ],
+                "stepout": [
+                    "up",
+                    "u"
+                ]
+            },
+        },
+        {
+            "name": "run_tests/1",
+            "type": "prolog",
+            "request": "launch",
+            "runtimeExecutable": "C:\\Program Files\\swipl\\bin\\swipl.exe",
+            "runtimeArgs": [],
+            "env": {},
+            "program": "dnd.plt",
+            "cwd": "${workspaceFolder}",
+            "startupQuery": "run_tests('${input:test}')",
+            "stopOnEntry": true,
+            "traceCmds": {
+                "continue": [
+                    "leap",
+                    "l"
+                ],
+                "stepover": [
+                    "skip",
+                    "s"
+                ],
+                "stepinto": [
+                    "creep",
+                    "c"
+                ],
+                "stepout": [
+                    "up",
+                    "u"
+                ]
+            },
+        },
     ],
     "inputs": [
         {
@@ -42,9 +102,19 @@
             "description": "Which puzzle code do you want to solve?",
             "options": [
                 "f.1",
-                "1.1"
+                "1.1",
             ],
             "default": "f.1"
-        }
+        },
+        {
+            "type": "pickString",
+            "id": "test",
+            "description": "Which test do you want to run?",
+            "options": [
+                "examples",
+                "board",
+            ],
+            "default": "board"
+        },
     ]
 }

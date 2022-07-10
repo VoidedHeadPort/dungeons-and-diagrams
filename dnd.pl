@@ -11,11 +11,10 @@ build_board(NumRows,NumCols,Board) :-
     % each row is of NumCols length
     build_rows(Board,NumCols).
 
-
-% could we use maplist instead?
 build_rows([],_).
 
 build_rows([Row|Rows],NumCols) :-
+    % could we use maplist instead?
     length(Row,NumCols),
     build_rows(Rows,NumCols).
 
@@ -71,24 +70,24 @@ puzzle('f.1', "adventurer's guide",
     [4,1,4,1,2,1],
     [
         [_,_,_,_,_,c],
-        [_,_,_,_,_,_],
-        [m,_,_,_,_,_],
-        [_,_,_,_,_,_],
+        _,
+        [m|_],
+        _,
         [_,_,_,_,_,m],
-        [m,_,_,_,_,_]
+        [m|_]
     ]).
 
 puzzle('1.1', "brightleaf iron mine",
     [3,2,5,3,4,1,4,4],
     [1,4,2,7,0,4,4,4],
     [
-        [_,_,_,_,_,_,_,_],
+        _,
         [_,_,_,_,_,_,_,m],
-        [_,_,m,_,_,_,_,_],
+        [_,_,m|_],
         [_,_,_,_,_,_,_,m],
-        [_,_,_,_,_,_,_,_],
+        _,
         [_,c,_,_,_,_,_,m],
-        [_,_,_,_,_,_,_,_],
+        _,
         [_,_,_,_,_,_,_,m]
     ]).
 
