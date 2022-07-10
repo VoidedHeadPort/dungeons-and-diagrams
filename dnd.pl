@@ -9,38 +9,73 @@ build_board(NumRows,NumCols,Board) :-
     % Board is NumRows x NumCols
     length(Board,NumRows),
     % each row is of NumCols length
-    build_rows(Board,NumCols).
+    maplist(maplist_length(NumCols),Board).
 
-build_rows([],_).
+maplist_length(Length,List) :-
+    length(List,Length).
 
-build_rows([Row|Rows],NumCols) :-
-    % could we use maplist instead?
-    length(Row,NumCols),
-    build_rows(Rows,NumCols).
+
+% count(Element, Count, List)
+% Count & fill List with the Element - unbound items will be filled with '_'
+%count(w,10,[w,w,w,w,w,w,w,w,w,w]).
+
+count(_,0,[]) :-
+    !.
+
+count(Element,Count,[Element|Rest]) :-
+    % succ(essor?) is similar to RestCount is Count + 1
+    % but with an extra check that RestCount >= 0
+    succ(RestCount,Count),
+    count(Element,RestCount,Rest).
+
+count(Element,Count,['_'|Rest]) :-
+    count(Element,Count,Rest).
+
+
+build_mega_board(RowCounts,ColCounts,Board,MegaRowCounts,MegaColCounts,MegaBoard) :-
+    build_mega_row_counts(RowCounts,MegaRowCounts),
+    build_mega_row_counts(ColCounts,MegaColCounts),
+    length(MegaColCounts,NumMegaCols),
+    length(WallRow,NumMegaCols),
+    count(w,WallRow,NumMegaCols),
+    build_mega_rows(Board,MegaRows),
+    append([WallRow|MegaRows],[WallRow],MegaBoard).
+
+build_mega_row_counts(RowCounts,MegaRowCounts) :-
+    length(RowCounts,NumRows),
+    % Build with the original NumRows then add 2 to everything
+    append([NumRows|RowCounts],[NumRows],TempRowCounts),
+    maplist(plus(2),TempRowCounts,MegaRowCounts).
+
+build_mega_rows(Rows,MegaRows) :-
+    maplist(build_mega_row,Rows,MegaRows).
+
+build_mega_row(Row,MegaRow) :-
+    append([w|Row],[w],MegaRow).
 
 
 print_board(Code,Name,RowCounts,ColCounts,Board) :-
     write('   '),writeln(Code),
     write('   '),writeln(Name),
-    write('   '),print_col_count(ColCounts),
-    print_row_count(RowCounts,Board).
+    write('   '),print_col_counts(ColCounts),
+    print_row_counts(RowCounts,Board).
 
-print_col_count([]) :-
+print_col_counts([]) :-
     nl.
 
-print_col_count([ColCount|ColCounts]) :-
+print_col_counts([ColCount|ColCounts]) :-
     write(ColCount),
     write(' '),
-    print_col_count(ColCounts).
+    print_col_counts(ColCounts).
 
-print_row_count([],[]) :-
+print_row_counts([],[]) :-
     nl.
 
-print_row_count([RowCount|RowCounts],[Row|Rows]) :-
+print_row_counts([RowCount|RowCounts],[Row|Rows]) :-
     write(RowCount),
     write(' |'),
     print_row(Row),
-    print_row_count(RowCounts,Rows).
+    print_row_counts(RowCounts,Rows).
 
 print_row([]) :-
     nl.

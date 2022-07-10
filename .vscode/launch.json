@@ -112,7 +112,9 @@
             "description": "Which test do you want to run?",
             "options": [
                 "examples",
+                "count",
                 "board",
+                "megaboard",
             ],
             "default": "board"
         },
