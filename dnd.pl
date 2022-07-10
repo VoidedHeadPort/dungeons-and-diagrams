@@ -15,8 +15,7 @@ maplist_length(Length,List) :-
     length(List,Length).
 
 
-fill(_,[]) :-
-    !.
+fill(_,[]).
 
 fill(Element,[Element|Rest]) :-
     fill(Element,Rest).
@@ -93,7 +92,7 @@ print_row([Element|Elements]) :-
 
 print_element(Element) :-
     var(Element),
-    write(s),
+    write('_'),
     !.
 
 print_element(Element) :-

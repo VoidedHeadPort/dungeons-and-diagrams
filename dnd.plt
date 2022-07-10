@@ -21,32 +21,32 @@ test(count_10_w_10) :-
     Row = [w,w,w,w,w,w,w,w,w,w].
 
 test(count_10_w_9, all(Row == [
-        [w,w,w,w,w,w,w,w,w,s],
-        [w,w,w,w,w,w,w,w,s,w],
-        [w,w,w,w,w,w,w,s,w,w],
-        [w,w,w,w,w,w,s,w,w,w],
-        [w,w,w,w,w,s,w,w,w,w],
-        [w,w,w,w,s,w,w,w,w,w],
-        [w,w,w,s,w,w,w,w,w,w],
-        [w,w,s,w,w,w,w,w,w,w],
-        [w,s,w,w,w,w,w,w,w,w],
-        [s,w,w,w,w,w,w,w,w,w]
-    ])) :-
+            [w,w,w,w,w,w,w,w,w,s],
+            [w,w,w,w,w,w,w,w,s,w],
+            [w,w,w,w,w,w,w,s,w,w],
+            [w,w,w,w,w,w,s,w,w,w],
+            [w,w,w,w,w,s,w,w,w,w],
+            [w,w,w,w,s,w,w,w,w,w],
+            [w,w,w,s,w,w,w,w,w,w],
+            [w,w,s,w,w,w,w,w,w,w],
+            [w,s,w,w,w,w,w,w,w,w],
+            [s,w,w,w,w,w,w,w,w,w]
+        ])) :-
     Row = [_,_,_,_,_,_,_,_,_,_],
     count(w,9,Row).
 
 test(count_10_w_1, all(Row == [
-    [w,s,s,s,s,s,s,s,s,s],
-    [s,w,s,s,s,s,s,s,s,s],
-    [s,s,w,s,s,s,s,s,s,s],
-    [s,s,s,w,s,s,s,s,s,s],
-    [s,s,s,s,w,s,s,s,s,s],
-    [s,s,s,s,s,w,s,s,s,s],
-    [s,s,s,s,s,s,w,s,s,s],
-    [s,s,s,s,s,s,s,w,s,s],
-    [s,s,s,s,s,s,s,s,w,s],
-    [s,s,s,s,s,s,s,s,s,w]
-])) :-
+            [w,s,s,s,s,s,s,s,s,s],
+            [s,w,s,s,s,s,s,s,s,s],
+            [s,s,w,s,s,s,s,s,s,s],
+            [s,s,s,w,s,s,s,s,s,s],
+            [s,s,s,s,w,s,s,s,s,s],
+            [s,s,s,s,s,w,s,s,s,s],
+            [s,s,s,s,s,s,w,s,s,s],
+            [s,s,s,s,s,s,s,w,s,s],
+            [s,s,s,s,s,s,s,s,w,s],
+            [s,s,s,s,s,s,s,s,s,w]
+        ])) :-
     Row = [_,_,_,_,_,_,_,_,_,_],
     count(w,1,Row).
 
