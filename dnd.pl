@@ -40,7 +40,7 @@ count(Element,Count,List) :-
     fill(Element,List),
     !.
 
-count(Element,Count,[Head|Tail]) :-
+count(Element,Count,[Element|Tail]) :-
     % succ(essor?) is similar to TailCount is Count + 1
     % but with an extra check that TailCount >= 0
     succ(TailCount,Count),
