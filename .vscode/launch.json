@@ -114,7 +114,7 @@
                 "examples",
                 "count",
                 "board",
-                "megaboard",
+                "mega_board",
                 "lines",
             ],
             "default": "board"
