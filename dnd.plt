@@ -178,3 +178,40 @@ test(build_mega_row_counts) :-
     MegaRowCounts = [12, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12].
 
 :- end_tests(mega_board).
+
+
+:- begin_tests(lines).
+
+test(rule_lines_simple_case) :-
+    RowCounts = [8,7,6,5,4,3,2,1],
+    ColCounts = [8,7,6,5,4,3,2,1],
+    build_board(8,8,Board),
+    rule_lines(RowCounts,ColCounts,Board),
+    Board == [
+        [w,w,w,w,w,w,w,w],
+        [w,w,w,w,w,w,w,s],
+        [w,w,w,w,w,w,s,s],
+        [w,w,w,w,w,s,s,s],
+        [w,w,w,w,s,s,s,s],
+        [w,w,w,s,s,s,s,s],
+        [w,w,s,s,s,s,s,s],
+        [w,s,s,s,s,s,s,s]
+    ].
+
+test(rule_lines_worst_case) :-
+    RowCounts = [1,2,3,4,5,6,7,8],
+    ColCounts = [1,2,3,4,5,6,7,8],
+    build_board(8,8,Board),
+    rule_lines(RowCounts,ColCounts,Board),
+    Board == [
+        [s,s,s,s,s,s,s,w],
+        [s,s,s,s,s,s,w,w],
+        [s,s,s,s,s,w,w,w],
+        [s,s,s,s,w,w,w,w],
+        [s,s,s,w,w,w,w,w],
+        [s,s,w,w,w,w,w,w],
+        [s,w,w,w,w,w,w,w],
+        [w,w,w,w,w,w,w,w]
+    ].
+
+:- end_tests(lines).
