@@ -22,10 +22,10 @@ build_board(NumRows,NumCols,Board) :-
     % Board is NumRows x NumCols
     length(Board,NumRows),
     % each row is of NumCols length
-    maplist(maplist_length(NumCols),Board).
-
-maplist_length(Length,List) :-
-    length(List,Length).
+    % most examples use same_length/2 since the ordering of arguments in length/2 doesn't work well with maplist
+    Board = [Row|Rows],
+    length(Row,NumCols),
+    maplist(same_length(Row),Rows).
 
 
 fill(_,[]).
@@ -40,14 +40,14 @@ count(Element,Count,List) :-
     fill(Element,List),
     !.
 
-count(Element,Count,[Element|Rest]) :-
-    % succ(essor?) is similar to RestCount is Count + 1
-    % but with an extra check that RestCount >= 0
-    succ(RestCount,Count),
-    count(Element,RestCount,Rest).
+count(Element,Count,[Head|Tail]) :-
+    % succ(essor?) is similar to TailCount is Count + 1
+    % but with an extra check that TailCount >= 0
+    succ(TailCount,Count),
+    count(Element,TailCount,Tail).
 
-count(Element,Count,[s|Rest]) :-
-    count(Element,Count,Rest).
+count(Element,Count,[s|Tail]) :-
+    count(Element,Count,Tail).
 
 
 build_mega_board(RowCounts,ColCounts,Board,MegaRowCounts,MegaColCounts,MegaBoard) :-
