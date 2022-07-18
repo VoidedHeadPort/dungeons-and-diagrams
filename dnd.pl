@@ -89,6 +89,7 @@ rule_lines_([line(_, LineCount, Line)|Rest]) :-
 
 
 print_board(Code, Name, RowCounts, ColCounts, Board) :-
+    nl,
     write('   '), writeln(Code),
     write('   '), writeln(Name),
     write('   '), print_col_counts(ColCounts),
@@ -121,6 +122,10 @@ print_row([Element|Elements]) :-
 
 print_element(Element) :-
     var(Element),
+    write('_'),
+    !.
+
+print_element(s) :-
     write('_'),
     !.
 
