@@ -35,10 +35,7 @@ fill(Element,[Element|Rest]) :-
 
 % count(Element, Count, List)
 % Count & fill List with the Element - unbound items will be filled with 's'
-count(Element,Count,List) :-
-    length(List,Count),
-    fill(Element,List),
-    !.
+count(_,0,[]).
 
 count(Element,Count,[Element|Tail]) :-
     % succ(essor?) is similar to TailCount is Count + 1
@@ -74,11 +71,25 @@ build_mega_row(Row,MegaRow) :-
 
 rule_lines(RowCounts,ColCounts,Rows) :-
     transpose(Rows,Cols),
+    append(RowCounts,ColCounts,LineCounts),
+    append(Rows,Cols,Lines),
     % Sum the number of used cells (or potential wall combos) [chests use 3 cells]
+    pack(LineCounts, Lines, Pack),
     % Sort by the least options to most options (combine rows & columns and their counts)
+    sort(Pack,SortedPack),
     % Fill in rows (& columns) with w & s, decrementing count for each w [count(w,Count,List)]
-    maplist(count(w),RowCounts,Rows),
-    maplist(count(w),ColCounts,Cols).
+    rule_lines_(SortedPack).
+
+pack([], [], []).
+pack([LineCount|LineCounts], [Line|Lines], [line(Count, LineCount, Line)|Pack]) :-
+    findall(Line, count(w, LineCount, Line), AllLines),
+    length(AllLines, Count),
+    pack(LineCounts, Lines, Pack).
+
+rule_lines_([]).
+rule_lines_([line(_, LineCount, Line)|Rest]) :-
+    count(w, LineCount, Line),
+    rule_lines_(Rest).
 
 
 print_board(Code,Name,RowCounts,ColCounts,Board) :-

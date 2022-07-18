@@ -15,55 +15,43 @@ test(member, [nondet]) :-
 
 :- begin_tests(count).
 
-test(count_10_w_10) :-
-    Row = [_,_,_,_,_,_,_,_,_,_],
-    count(w,10,Row),
-    Row = [w,w,w,w,w,w,w,w,w,w].
-
-test(count_10_w_9, all(Row == [
-            [w,w,w,w,w,w,w,w,w,s],
-            [w,w,w,w,w,w,w,w,s,w],
-            [w,w,w,w,w,w,w,s,w,w],
-            [w,w,w,w,w,w,s,w,w,w],
-            [w,w,w,w,w,s,w,w,w,w],
-            [w,w,w,w,s,w,w,w,w,w],
-            [w,w,w,s,w,w,w,w,w,w],
-            [w,w,s,w,w,w,w,w,w,w],
-            [w,s,w,w,w,w,w,w,w,w],
-            [s,w,w,w,w,w,w,w,w,w]
+test(count_8_w_8, all(Row == [
+            [w,w,w,w,w,w,w,w]
         ])) :-
-    Row = [_,_,_,_,_,_,_,_,_,_],
-    count(w,9,Row).
+    length(Row,8),
+    count(w,8,Row).
 
-test(count_10_w_1, all(Row == [
-            [w,s,s,s,s,s,s,s,s,s],
-            [s,w,s,s,s,s,s,s,s,s],
-            [s,s,w,s,s,s,s,s,s,s],
-            [s,s,s,w,s,s,s,s,s,s],
-            [s,s,s,s,w,s,s,s,s,s],
-            [s,s,s,s,s,w,s,s,s,s],
-            [s,s,s,s,s,s,w,s,s,s],
-            [s,s,s,s,s,s,s,w,s,s],
-            [s,s,s,s,s,s,s,s,w,s],
-            [s,s,s,s,s,s,s,s,s,w]
+test(count_8_w_7, all(Row == [
+            [w,w,w,w,w,w,w,s],
+            [w,w,w,w,w,w,s,w],
+            [w,w,w,w,w,s,w,w],
+            [w,w,w,w,s,w,w,w],
+            [w,w,w,s,w,w,w,w],
+            [w,w,s,w,w,w,w,w],
+            [w,s,w,w,w,w,w,w],
+            [s,w,w,w,w,w,w,w]
         ])) :-
-    Row = [_,_,_,_,_,_,_,_,_,_],
+    length(Row,8),
+    count(w,7,Row).
+
+test(count_8_w_1, all(Row == [
+            [w,s,s,s,s,s,s,s],
+            [s,w,s,s,s,s,s,s],
+            [s,s,w,s,s,s,s,s],
+            [s,s,s,w,s,s,s,s],
+            [s,s,s,s,w,s,s,s],
+            [s,s,s,s,s,w,s,s],
+            [s,s,s,s,s,s,w,s],
+            [s,s,s,s,s,s,s,w]
+        ])) :-
+    length(Row,8),
     count(w,1,Row).
 
-test(count_10_w_0) :-
-    Row = [_,_,_,_,_,_,_,_,_,_],
-    count(w,0,Row),
-    Row = [s,s,s,s,s,s,s,s,s,s].
-
-test(count_8_w_8) :-
-    Row = [_,_,_,_,_,_,_,_],
-    count(w,8,Row),
-    Row = [w,w,w,w,w,w,w,w].
-
-test(count_8_w_0) :-
-    Row = [_,_,_,_,_,_,_,_],
-    count(w,0,Row),
-    Row = [s,s,s,s,s,s,s,s].
+test(count_8_w_0, all(Row == [
+            [s,s,s,s,s,s,s,s]
+        ])) :-
+    length(Row,8),
+    count(w,0,Row).
 
 :- end_tests(count).
 
@@ -143,7 +131,7 @@ test(build_board_8x8_partial) :-
 
 :- begin_tests(mega_board).
 
-test(build_mega_board_8x8_empty) :-
+test(build_mega_board_8x8_empty, nondet) :-
     RowCounts = [1,2,3,4,5,6,7,8],
     ColCounts = [7,6,5,4,3,2,1,0],
     Board = [
@@ -198,7 +186,6 @@ test(rule_lines_simple_case, nondet) :-
         [w,s,s,s,s,s,s,s]
     ].
 
-/*
 test(rule_lines_worst_case, nondet) :-
     RowCounts = [1,2,3,4,5,6,7,8],
     ColCounts = [1,2,3,4,5,6,7,8],
@@ -214,6 +201,5 @@ test(rule_lines_worst_case, nondet) :-
         [s,w,w,w,w,w,w,w],
         [w,w,w,w,w,w,w,w]
     ].
- */
 
 :- end_tests(lines).
