@@ -214,6 +214,29 @@ test(rule_lines_worst_case, nondet) :-
 :- end_tests(lines).
 
 
+:- begin_tests(hallways).
+
+test(rule_hallways_valid, nondet) :-
+    Rows = [
+        [w,w,s,m],
+        [m,w,s,w],
+        [s,w,s,w],
+        [s,s,s,w]
+    ],
+    rule_hallways(Rows).
+
+test(rule_hallways_invalid, fail) :-
+    Rows = [
+        [w,w,s,m],
+        [w,s,s,w],
+        [w,s,s,w],
+        [w,w,w,w]
+    ],
+    rule_hallways(Rows).
+
+:- end_tests(hallways).
+
+
 :- begin_tests(dnd).
 
 test(solve_puzzle_f_1, nondet) :-

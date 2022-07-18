@@ -16,6 +16,7 @@ dnd(RowCounts, ColCounts, Rows) :-
     % - 5x5 rule for chests
     % - 3x3 rule for monsters (and invalid dead ends)
     % - 2x2 rule for invalid corridors
+    %rule_hallways(Rows).
 
 
 build_board(NumRows, NumCols, Board) :-
@@ -36,19 +37,17 @@ fill(Element, [Element|Rest]) :-
 % count(Element, Count, List)
 % Count & fill List with the Element - unbound items will be filled with 's'
 count(_, 0, []).
-
 count(Element, Count, [Element|Tail]) :-
     % succ(essor?) is similar to TailCount is Count + 1
     % but with an extra check that TailCount >= 0
     succ(TailCount, Count),
     count(Element, TailCount, Tail).
-
 count(Element, Count, [s|Tail]) :-
+    Element \= s,
     count(Element, Count, Tail).
-
 count(Element, Count, [Head|Tail]) :-
     nonvar(Head),
-    Head \= Element,
+    Element \= Head,
     count(Element, Count, Tail).
 
 
@@ -74,7 +73,7 @@ rule_lines(RowCounts, ColCounts, Rows) :-
     % Sort by the least options to most options (combine rows & columns and their counts)
     sort(Pack, SortedPack),
     % Fill in rows (& columns) with w & s, decrementing count for each w [count(w, Count, List)]
-    rule_lines_(SortedPack).
+    count_pack(SortedPack).
 
 pack([], [], []).
 pack([LineCount|LineCounts], [Line|Lines], [line(Count, LineCount, Line)|Pack]) :-
@@ -82,10 +81,28 @@ pack([LineCount|LineCounts], [Line|Lines], [line(Count, LineCount, Line)|Pack]) 
     length(AllLines, Count),
     pack(LineCounts, Lines, Pack).
 
-rule_lines_([]).
-rule_lines_([line(_, LineCount, Line)|Rest]) :-
+count_pack([]).
+count_pack([line(_, LineCount, Line)|Rest]) :-
     count(w, LineCount, Line),
-    rule_lines_(Rest).
+    count_pack(Rest).
+
+
+rule_hallways([_]).
+rule_hallways([[_]|_]).
+rule_hallways([Row1,Row2|Rows]) :-
+    Row1 = [A1,B1|_],
+    Row2 = [A2,B2|_],
+    rule_hallways_2x2([[A1,B1],[A2,B2]]),
+    rule_hallways([Row2|Rows]),
+    % Remove the first element from each Row in Rows.
+    maplist(list_tail, [Row1,Row2|Rows], Rest),
+    rule_hallways(Rest).
+
+rule_hallways_2x2([[s,s],[s,s]]) :-
+    !, fail.
+rule_hallways_2x2(_).
+
+list_tail([_|Rest], Rest).
 
 
 print_board(Code, Name, RowCounts, ColCounts, Board) :-
