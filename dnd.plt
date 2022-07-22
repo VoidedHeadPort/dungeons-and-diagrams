@@ -177,6 +177,36 @@ test(build_mega_board_8x8_empty) :-
 
 :- begin_tests(lines).
 
+test(rule_lines_2x2, all(Board == [
+            [
+                [w, s],
+                [s, w]
+            ],
+            [
+                [s, w],
+                [w, s]
+            ]
+        ])) :-
+    RowCounts = [1,1],
+    ColCounts = [1,1],
+    build_board(2, 2, Board),
+    rule_lines(RowCounts, ColCounts, Board).
+
+test(rule_lines_2x2_m, all(Board == [
+    [
+        [m, w],
+        [w, s]
+    ]
+])) :-
+RowCounts = [1,1],
+ColCounts = [1,1],
+build_board(2, 2, Board),
+Board = [
+    [m,_],
+    [_,_]
+],
+rule_lines(RowCounts, ColCounts, Board).
+
 test(rule_lines_simple_case, nondet) :-
     RowCounts = [8,7,6,5,4,3,2,1],
     ColCounts = [8,7,6,5,4,3,2,1],
