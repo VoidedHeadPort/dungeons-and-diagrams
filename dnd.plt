@@ -81,6 +81,12 @@ test(count_2_w_0_filled, all(Row == [
     Row = [s,s],
     count(w, 0, Row).
 
+test(count_1_w_0_filled, all(Row == [
+            [s]
+        ])) :-
+    Row = [s],
+    count(w, 0, Row).
+
 :- end_tests(count).
 
 

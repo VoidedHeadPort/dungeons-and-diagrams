@@ -6,7 +6,7 @@ dnd(RowCounts, ColCounts, Rows) :-
     build_board(NumRows, NumCols, Rows),
     build_mega_board(Rows, _MegaRows),
     % Build columns out of the Rows (instead of rows)
-    rule_lines(RowCounts, ColCounts, Rows).
+    rule_lines(RowCounts, ColCounts, Rows),
     % Work through the MegaRows. Use corners at:
     % [0,0], [0,1], [0,1], etc
     % [1,0], [1,1], etc
@@ -16,7 +16,7 @@ dnd(RowCounts, ColCounts, Rows) :-
     % - 5x5 rule for chests
     % - 3x3 rule for monsters (and invalid dead ends)
     % - 2x2 rule for invalid corridors
-    %rule_hallways(Rows).
+    rule_hallways(Rows).
 
 
 build_board(NumRows, NumCols, Board) :-
@@ -43,8 +43,9 @@ count(Element, Count, [Element|Tail]) :-
     % but with an extra check that TailCount >= 0
     succ(TailCount, Count),
     count(Element, TailCount, Tail).
-count(Element, Count, [s|Tail]) :-
-    Element \= s,
+count(Element, Count, [Head|Tail]) :-
+    var(Head),
+    Head = s,
     count(Element, Count, Tail).
 count(Element, Count, [Head|Tail]) :-
     nonvar(Head),
