@@ -69,6 +69,18 @@ test(count_8_w_1_m, all(Row == [
     Row = [_,_,m,_,_,_,_,_],
     count(w, 1, Row).
 
+test(count_2_w_1_filled, all(Row == [
+            [w,s]
+        ])) :-
+    Row = [w,s],
+    count(w, 1, Row).
+
+test(count_2_w_0_filled, all(Row == [
+            [s,s]
+        ])) :-
+    Row = [s,s],
+    count(w, 0, Row).
+
 :- end_tests(count).
 
 
@@ -193,19 +205,19 @@ test(rule_lines_2x2, all(Board == [
     rule_lines(RowCounts, ColCounts, Board).
 
 test(rule_lines_2x2_m, all(Board == [
-    [
-        [m, w],
-        [w, s]
-    ]
-])) :-
-RowCounts = [1,1],
-ColCounts = [1,1],
-build_board(2, 2, Board),
-Board = [
-    [m,_],
-    [_,_]
-],
-rule_lines(RowCounts, ColCounts, Board).
+            [
+                [m, w],
+                [w, s]
+            ]
+        ])) :-
+    RowCounts = [1,1],
+    ColCounts = [1,1],
+    build_board(2, 2, Board),
+    Board = [
+        [m,_],
+        [_,_]
+    ],
+    rule_lines(RowCounts, ColCounts, Board).
 
 test(rule_lines_simple_case, nondet) :-
     RowCounts = [8,7,6,5,4,3,2,1],
