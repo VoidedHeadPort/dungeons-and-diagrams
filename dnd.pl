@@ -29,14 +29,15 @@ build_board(NumRows, NumCols, Board) :-
     maplist(same_length(Row), Rows).
 
 
-fill(_, []).
-
-fill(Element, [Element|Rest]) :-
-    fill(Element, Rest).
+fill(_, []) :- !.
+fill(Element, [Element|Tail]) :-
+    fill(Element, Tail).
 
 % count(Element, Count, List)
 % Count & fill List with the Element - unbound items will be filled with 's'
-count(_, 0, []).
+count(Element, Count, List) :-
+    length(List, Count), !,
+    fill(Element, List).
 count(Element, Count, [Element|Tail]) :-
     % succ(essor?) is similar to TailCount is Count + 1
     % but with an extra check that TailCount >= 0
@@ -56,7 +57,7 @@ build_mega_board(Board, MegaBoard) :-
     length(Row, NumCols),
     NumMegaCols is NumCols + 2,
     length(WallRow, NumMegaCols),
-    count(w, NumMegaCols, WallRow),
+    fill(w, WallRow),
     maplist(build_mega_row, Board, MegaRows),
     append([WallRow|MegaRows], [WallRow], MegaBoard).
 

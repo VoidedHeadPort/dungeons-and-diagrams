@@ -15,9 +15,7 @@ test(member, [nondet]) :-
 
 :- begin_tests(count).
 
-test(count_8_w_8, all(Row == [
-            [w,w,w,w,w,w,w,w]
-        ])) :-
+test(count_8_w_8, true(Row == [w,w,w,w,w,w,w,w])) :-
     Row = [_,_,_,_,_,_,_,_],
     count(w, 8, Row).
 
@@ -149,7 +147,7 @@ test(build_board_8x8_partial) :-
 
 :- begin_tests(mega_board).
 
-test(build_mega_board_8x8_empty, nondet) :-
+test(build_mega_board_8x8_empty) :-
     Board = [
         [A1,A2,A3,A4,A5,A6,A7,A8],
         [B1,B2,B3,B4,B5,B6,B7,B8],
