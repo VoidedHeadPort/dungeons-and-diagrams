@@ -193,6 +193,193 @@ test(build_mega_board_8x8_empty) :-
 :- end_tests(mega_board).
 
 
+:- begin_tests(chests).
+
+test(rule_chests_0) :-
+    MegaBoard = [
+        [w,w,w,w,w],
+        [w,_,_,_,w],
+        [w,_,_,_,w],
+        [w,_,_,_,w],
+        [w,w,w,w,w]
+    ],
+    rule_chests(MegaBoard).
+
+test(rule_chests_1_begin, nondet) :-
+    Board = [
+        [c,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_chests(MegaBoard),
+    Board = [
+        [ c, r, r,D1|_],
+        [ r, r, r,D2|_],
+        [ r, r, r,D3|_],
+        [A4,B4,C4,D4|_]|
+    _],
+    count(w, 6, [D1,D2,D3,D4,C4,B4,A4]).
+
+test(rule_chests_1_mid, nondet) :-
+    Board = [
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,c,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_chests(MegaBoard).
+
+test(rule_chests_2_begin_end, nondet) :-
+    Board = [
+        [c,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,c]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_chests(MegaBoard),
+    Board = [
+        [ c, r, r,D1, _, _, _, _],
+        [ r, r, r,D2, _, _, _, _],
+        [ r, r, r,D3, _, _, _, _],
+        [A4,B4,C4, _, _, _, _, _],
+        [ _, _, _, _, _,F5,G5,H5],
+        [ _, _, _, _,E6, r, r, r],
+        [ _, _, _, _,E7, r, r, r],
+        [ _, _, _, _,E8, r, r, c]
+    ],
+    count(w, 5, [D1,D2,D3,A4,B4,C4]),
+    count(w, 5, [F5,G5,H5,E6,E7,E8]).
+
+test(rule_chests_puzzle_1_1, nondet) :-
+    Board = [
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,c,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_chests(MegaBoard),
+    Board = [
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,w,w,_,_,_,_,_],
+        [r,r,r,w,_,_,_,_],
+        [r,c,r,w,_,_,_,_],
+        [r,r,r,w,_,_,_,_],
+        [w,w,w,_,_,_,_,_]
+    ].
+
+test(rule_chests_puzzle_1_1_reduced_cols, nondet) :-
+    Board = [
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,c,_,_],
+        [_,_,_,_],
+        [_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_chests(MegaBoard),
+    Board = [
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,w,w,_],
+        [r,r,r,w],
+        [r,c,r,w],
+        [r,r,r,w],
+        [w,w,w,_]
+    ].
+
+test(rule_chests_puzzle_1_1_reduced_cols_further, nondet) :-
+    Board = [
+        [_,_,_],
+        [_,_,_],
+        [_,_,_],
+        [_,_,_],
+        [_,_,_],
+        [_,c,_],
+        [_,_,_],
+        [_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_chests(MegaBoard),
+    Board = [
+        [_,_,_],
+        [_,_,_],
+        [_,_,_],
+        [_,w,w],
+        [r,r,r],
+        [r,c,r],
+        [r,r,r],
+        [w,w,w]
+    ].
+
+test(rule_chests_puzzle_1_1_reduced_cols_rows, nondet) :-
+    Board = [
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,c,_,_],
+        [_,_,_,_],
+        [_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_chests(MegaBoard),
+    Board = [
+        [_,_,_,_],
+        [_,w,w,_],
+        [r,r,r,w],
+        [r,c,r,w],
+        [r,r,r,w],
+        [w,w,w,_]
+    ].
+
+test(rule_chests_puzzle_1_1_reduced_cols_rows_further, nondet) :-
+    Board = [
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,c,_,_],
+        [_,_,_,_],
+        [_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_chests(MegaBoard),
+    Board = [
+        [_,w,w,_],
+        [r,r,r,w],
+        [r,c,r,w],
+        [r,r,r,w],
+        [w,w,w,_]
+    ].
+
+
+:- end_tests(chests).
+
+
 :- begin_tests(lines).
 
 test(rule_lines_2x2, all(Board == [

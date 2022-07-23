@@ -4,9 +4,7 @@ dnd(RowCounts, ColCounts, Rows) :-
     length(RowCounts, NumRows),
     length(ColCounts, NumCols),
     build_board(NumRows, NumCols, Rows),
-    build_mega_board(Rows, _MegaRows),
-    % Build columns out of the Rows (instead of rows)
-    rule_lines(RowCounts, ColCounts, Rows),
+    build_mega_board(Rows, MegaRows),
     % Work through the MegaRows. Use corners at:
     % [0,0], [0,1], [0,1], etc
     % [1,0], [1,1], etc
@@ -14,6 +12,9 @@ dnd(RowCounts, ColCounts, Rows) :-
     % - Some of these rules could be applied before filling the rows (& columns)
     %   For example, I often try to fill out the chest room before rows
     % - 5x5 rule for chests
+    rule_chests(MegaRows),
+    % Build columns out of the Rows (instead of rows)
+    rule_lines(RowCounts, ColCounts, Rows),
     % - 3x3 rule for monsters (and invalid dead ends)
     % - 2x2 rule for invalid corridors
     rule_hallways(Rows).
@@ -89,22 +90,91 @@ count_pack([line(_, LineCount, Line)|Rest]) :-
     count_pack(Rest).
 
 
+list_tail([_|Tail], Tail).
+
+list_tail(Num, List, Tail) :-
+    length(Head, Num),
+    append(Head, Tail, List).
+
+
+% We don't have a terminating clause since it should fail when we reach []
+detect_chest([Head|_]) :-
+    nonvar(Head), !,
+    Head == c.
+
+detect_chest([_|Tail]) :-
+    detect_chest(Tail).
+
+
+% rule_chest_rooms?
+rule_chests([Row1, Row2, Row3, Row4, Row5|Rows]) :-
+    Row1 = [_, _, _, _, _|_],
+    Row2 = [_, B2,C2,D2,_|_],
+    Row3 = [_, B3,C3,D3,_|_],
+    Row4 = [_, B4,C4,D4,_|_],
+    Row5 = [_, _, _, _, _|_],
+    detect_chest([B2,C2,D2,B3,C3,D3,B4,C4,D4]), !,
+    chest_room([Row1, Row2, Row3, Row4, Row5|Rows]),
+    rule_chests([Row5|Rows]),
+    maplist(list_tail(4), [Row1, Row2, Row3, Row4, Row5|Rows], Rest),
+    rule_chests(Rest).
+
+rule_chests([Row1, Row2, Row3, Row4, Row5|Rows]) :-
+    Row1 = [_,_,_,_,_|_],
+    Row2 = [_,_,_,_,_|_],
+    Row3 = [_,_,_,_,_|_],
+    Row4 = [_,_,_,_,_|_],
+    Row5 = [_,_,_,_,_|_],
+    !, rule_chests([Row2, Row3, Row4, Row5|Rows]),
+    maplist(list_tail, [Row1, Row2, Row3, Row4, Row5|Rows], Rest),
+    rule_chests(Rest).
+
+% Cheat with ! for both other rules?
+rule_chests(_).
+
+chest_room([Row1, Row2, Row3, Row4, Row5|_]) :-
+    Row1 = [_, B1,C1,D1,_|_],
+    Row2 = [A2,B2,C2,D2,E2|_],
+    Row3 = [A3,B3,C3,D3,E3|_],
+    Row4 = [A4,B4,C4,D4,E4|_],
+    Row5 = [_, B5,C5,D5,_|_],
+    detect_chest([B2,C2,D2,B3,C3,D3,B4,C4,D4]),
+    count(r, 8, [B2,C2,D2,B3,C3,D3,B4,C4,D4]),
+    count(w, 11, [B1,C1,D1,E2,E3,E4,D5,C5,B5,A4,A3,A2]).
+
+chest_room([Row1, Row2, Row3, Row4, Row5|Rows]) :-
+    Row1 = [_, _, _, _, _|_],
+    Row2 = [_, _, _, _, _|_],
+    Row3 = [_, B3,C3,D3,_|_],
+    Row4 = [_, B4,C4,D4,_|_],
+    Row5 = [_, _, _, _, _|_],
+    detect_chest([B3,C3,D3,B4,C4,D4]),
+    chest_room([Row2, Row3, Row4, Row5|Rows]).
+
+chest_room([Row1, Row2, Row3, Row4, Row5|Rows]) :-
+    Row1 = [_, _, _, _, _|_],
+    Row2 = [_, _, C2,D2,_|_],
+    Row3 = [_, _, C3,D3,_|_],
+    Row4 = [_, _, C4,D4,_|_],
+    Row5 = [_, _, _, _, _|_],
+    detect_chest([C2,D2,C3,D3,C4,D4]),
+    maplist(list_tail, [Row1, Row2, Row3, Row4, Row5|Rows], Rest),
+    chest_room(Rest).
+
 rule_hallways([_]).
 rule_hallways([[_]|_]).
-rule_hallways([Row1,Row2|Rows]) :-
+rule_hallways([Row1, Row2|Rows]) :-
     Row1 = [A1,B1|_],
     Row2 = [A2,B2|_],
     rule_hallways_2x2([[A1,B1],[A2,B2]]),
     rule_hallways([Row2|Rows]),
     % Remove the first element from each Row in Rows.
-    maplist(list_tail, [Row1,Row2|Rows], Rest),
+    maplist(list_tail, [Row1, Row2|Rows], Rest),
     rule_hallways(Rest).
 
 rule_hallways_2x2([[s,s],[s,s]]) :-
     !, fail.
 rule_hallways_2x2(_).
-
-list_tail([_|Rest], Rest).
 
 
 print_board(Code, Name, RowCounts, ColCounts, Board) :-
@@ -163,25 +233,38 @@ puzzle('f.1', "adventurer's guide",
     [4,1,4,1,2,1],
     [
         [_,_,_,_,_,c],
-        _,
-        [m|_],
-        _,
+        [_,_,_,_,_,_],
+        [m,_,_,_,_,_],
+        [_,_,_,_,_,_],
         [_,_,_,_,_,m],
-        [m|_]
+        [m,_,_,_,_,_]
     ]).
 
 puzzle('1.1', "brightleaf iron mine",
     [3,2,5,3,4,1,4,4],
     [1,4,2,7,0,4,4,4],
     [
-        _,
+        [_,_,_,_,_,_,_,_],
         [_,_,_,_,_,_,_,m],
-        [_,_,m|_],
+        [_,_,m,_,_,_,_,_],
         [_,_,_,_,_,_,_,m],
-        _,
+        [_,_,_,_,_,_,_,_],
         [_,c,_,_,_,_,_,m],
-        _,
+        [_,_,_,_,_,_,_,_],
         [_,_,_,_,_,_,_,m]
     ]).
 
+puzzle('1.1.reduced', "brightleaf iron mine",
+    [3,2,5,3,4,1,4,4],
+    [1,4,2,7],
+    [
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,_,_,_],
+        [_,c,_,_],
+        [_,_,_,_],
+        [_,_,_,_]
+    ]).
 
