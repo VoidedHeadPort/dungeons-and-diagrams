@@ -113,6 +113,7 @@ rule_chests(Rows) :-
 
 rule_chests(IsFirstRow, IsFirstCol, [Row|Rows]) :-
     chest_zone(IsFirstRow, IsFirstCol, [Row|Rows], ChestZone),
+    !,
     (   detect_chest(ChestZone)
     ->  chest_room([Row|Rows])
     ;   true
