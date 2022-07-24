@@ -177,6 +177,14 @@ rule_hallways_2x2([[s,s],[s,s]]) :-
 rule_hallways_2x2(_).
 
 
+print_board(Board) :-
+    same_length(Board, RowCounts),
+    Board = [Row|_],
+    same_length(Row, ColCounts),
+    fill('_', RowCounts),
+    fill('_', ColCounts),
+    print_board('_', '_', RowCounts, ColCounts, Board).
+
 print_board(Code, Name, RowCounts, ColCounts, Board) :-
     nl,
     write('   '), writeln(Code),
