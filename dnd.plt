@@ -447,6 +447,53 @@ test(rule_lines_worst_case, nondet) :-
 :- end_tests(lines).
 
 
+:- begin_tests(dead_ends).
+
+test(rule_dead_ends_monster_invalid, fail) :-
+    Board = [
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,s,_,_,_,_,_,_],
+        [w,m,w,_,_,_,_,_],
+        [_,s,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_dead_ends(MegaBoard).
+
+test(rule_dead_ends_monster_box, fail) :-
+    Board = [
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,w,_,_,_,_],
+        [_,_,w,m,w,_,_,_],
+        [_,_,_,w,_,_,_,_],
+        [_,_,_,_,_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_dead_ends(MegaBoard).
+
+test(rule_dead_ends_monster) :-
+    Board = [
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,w,_],
+        [_,_,_,_,_,w,m,w],
+        [_,_,_,_,_,_,s,_],
+        [_,_,_,_,_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_dead_ends(MegaBoard).
+
+:- end_tests(dead_ends).
+
+
 :- begin_tests(hallways).
 
 test(rule_hallways_valid, nondet) :-

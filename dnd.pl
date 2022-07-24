@@ -16,6 +16,7 @@ dnd(RowCounts, ColCounts, Rows) :-
     % Build columns out of the Rows (instead of rows)
     rule_lines(RowCounts, ColCounts, Rows),
     % - 3x3 rule for monsters (and invalid dead ends)
+    rule_dead_ends(MegaRows),
     % - 2x2 rule for invalid corridors
     rule_hallways(Rows).
 
@@ -95,6 +96,66 @@ list_tail([_|Tail], Tail).
 list_tail(Num, List, Tail) :-
     length(Head, Num),
     append(Head, Tail, List).
+
+
+rule_dead_ends(Rows) :-
+    rule_dead_ends(true, Rows).
+
+rule_dead_ends(IsFirstRow, [Row1, Row2, Row3|Rows]) :-
+    Row1 = [_,N,_|_],
+    Row2 = [W,C,E|_],
+    Row3 = [_,S,_|_],
+    !,
+    (   maplist(nonvar, [N,E,S,W]),
+        nonvar(C),
+        C = m
+    ->  dead_end([Row1, Row2, Row3])
+    ;   maplist(nonvar, [N,E,S,W]),
+        nonvar(C),
+        C = s
+    ->  \+ dead_end([Row1, Row2, Row3])
+    ;   true
+    ),
+    rule_dead_ends(false, [Row2, Row3|Rows]),
+    (   IsFirstRow == true
+    ->  maplist(list_tail, [Row1, Row2, Row3|Rows], Tail),
+        rule_dead_ends(IsFirstRow, Tail)
+    ;   true
+    ).
+
+rule_dead_ends(_, _).
+
+dead_end([Row1, Row2, Row3]) :-
+    Row1 = [_,w,_|_],
+    Row2 = [w,C,w|_],
+    Row3 = [_,w,_|_],
+    nonvar(C),
+    C \= m,
+    !.
+
+dead_end([Row1, Row2, Row3]) :-
+    Row1 = [_,s,_|_],
+    Row2 = [w,_,w|_],
+    Row3 = [_,w,_|_],
+    !.
+
+dead_end([Row1, Row2, Row3]) :-
+    Row1 = [_,w,_|_],
+    Row2 = [w,_,s|_],
+    Row3 = [_,w,_|_],
+    !.
+
+dead_end([Row1, Row2, Row3]) :-
+    Row1 = [_,w,_|_],
+    Row2 = [w,_,w|_],
+    Row3 = [_,s,_|_],
+    !.
+
+dead_end([Row1, Row2, Row3]) :-
+    Row1 = [_,w,_|_],
+    Row2 = [s,_,w|_],
+    Row3 = [_,w,_|_],
+    !.
 
 
 % We don't have a terminating clause since it should fail when we reach []
@@ -289,18 +350,3 @@ puzzle('1.1', "brightleaf iron mine",
         [_,_,_,_,_,_,_,_],
         [_,_,_,_,_,_,_,m]
     ]).
-
-puzzle('1.1.reduced', "brightleaf iron mine",
-    [3,2,5,3,4,1,4,4],
-    [1,4,2,7],
-    [
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,c,_,_],
-        [_,_,_,_],
-        [_,_,_,_]
-    ]).
-
