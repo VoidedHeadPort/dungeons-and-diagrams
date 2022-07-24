@@ -515,14 +515,3 @@ test(rule_hallways_invalid, fail) :-
     rule_hallways(Rows).
 
 :- end_tests(hallways).
-
-
-:- begin_tests(dnd).
-
-test(solve_puzzle_f_1, nondet) :-
-    solve_puzzle('f.1').
-
-test(solve_puzzle_1_1, nondet) :-
-    solve_puzzle('1.1').
-
-:- end_tests(dnd).
