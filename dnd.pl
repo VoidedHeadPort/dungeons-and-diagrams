@@ -99,7 +99,8 @@ list_tail(Num, List, Tail) :-
 
 % We don't have a terminating clause since it should fail when we reach []
 detect_chest([Head|_]) :-
-    nonvar(Head), !,
+    nonvar(Head),
+    !,
     Head == c.
 
 detect_chest([_|Tail]) :-
@@ -107,30 +108,53 @@ detect_chest([_|Tail]) :-
 
 
 % rule_chest_rooms?
-rule_chests([Row1, Row2, Row3, Row4, Row5|Rows]) :-
-    Row1 = [_, _, _, _, _|_],
-    Row2 = [_, B2,C2,D2,_|_],
-    Row3 = [_, B3,C3,D3,_|_],
-    Row4 = [_, B4,C4,D4,_|_],
-    Row5 = [_, _, _, _, _|_],
-    detect_chest([B2,C2,D2,B3,C3,D3,B4,C4,D4]), !,
-    chest_room([Row1, Row2, Row3, Row4, Row5|Rows]),
-    rule_chests([Row5|Rows]),
-    maplist(list_tail(4), [Row1, Row2, Row3, Row4, Row5|Rows], Rest),
-    rule_chests(Rest).
+rule_chests(Rows) :-
+    rule_chests(true, true, Rows).
 
-rule_chests([Row1, Row2, Row3, Row4, Row5|Rows]) :-
-    Row1 = [_,_,_,_,_|_],
-    Row2 = [_,_,_,_,_|_],
-    Row3 = [_,_,_,_,_|_],
-    Row4 = [_,_,_,_,_|_],
-    Row5 = [_,_,_,_,_|_],
-    !, rule_chests([Row2, Row3, Row4, Row5|Rows]),
-    maplist(list_tail, [Row1, Row2, Row3, Row4, Row5|Rows], Rest),
-    rule_chests(Rest).
+rule_chests(IsFirstRow, IsFirstCol, [Row|Rows]) :-
+    chest_zone(IsFirstRow, IsFirstCol, [Row|Rows], ChestZone),
+    (   detect_chest(ChestZone)
+    ->  chest_room([Row|Rows])
+    ;   true
+    ),
+    rule_chests(false, IsFirstCol, Rows),
+    (   IsFirstRow == true
+    ->  maplist(list_tail, [Row|Rows], Tail),
+        rule_chests(IsFirstRow, false, Tail)
+    ;   true
+    ).
 
-% Cheat with ! for both other rules?
-rule_chests(_).
+% Cheat with ! for the other rules?
+rule_chests(_, _, _).
+
+% chest_zone(IsFirstRow, IsFirstCol, Rows, ChestZone)
+chest_zone(true, true, [Row1, Row2, Row3, Row4, Row5|_], [B2,C2,D2,B3,C3,D3,B4,C4,D4]) :-
+    Row1 = [ _, _, _, _, _|_],
+    Row2 = [ _,B2,C2,D2, _|_],
+    Row3 = [ _,B3,C3,D3, _|_],
+    Row4 = [ _,B4,C4,D4, _|_],
+    Row5 = [ _, _, _, _, _|_].
+
+chest_zone(true, false, [Row1, Row2, Row3, Row4, Row5|_], [D2,D3,D4]) :-
+    Row1 = [ _, _, _, _, _|_],
+    Row2 = [ _, _, _,D2, _|_],
+    Row3 = [ _, _, _,D3, _|_],
+    Row4 = [ _, _, _,D4, _|_],
+    Row5 = [ _, _, _, _, _|_].
+
+chest_zone(false, true, [Row1, Row2, Row3, Row4, Row5|_], [B4,C4,D4]) :-
+    Row1 = [ _, _, _, _, _|_],
+    Row2 = [ _, _, _, _, _|_],
+    Row3 = [ _, _, _, _, _|_],
+    Row4 = [ _,B4,C4,D4, _|_],
+    Row5 = [ _, _, _, _, _|_].
+
+chest_zone(false, false, [Row1, Row2, Row3, Row4, Row5|_], [D4]) :-
+    Row1 = [ _, _, _, _, _|_],
+    Row2 = [ _, _, _, _, _|_],
+    Row3 = [ _, _, _, _, _|_],
+    Row4 = [ _, _, _,D4, _|_],
+    Row5 = [ _, _, _, _, _|_].
 
 chest_room([Row1, Row2, Row3, Row4, Row5|_]) :-
     Row1 = [_, B1,C1,D1,_|_],
@@ -161,6 +185,7 @@ chest_room([Row1, Row2, Row3, Row4, Row5|Rows]) :-
     maplist(list_tail, [Row1, Row2, Row3, Row4, Row5|Rows], Rest),
     chest_room(Rest).
 
+
 rule_hallways([_]).
 rule_hallways([[_]|_]).
 rule_hallways([Row1, Row2|Rows]) :-
@@ -172,7 +197,9 @@ rule_hallways([Row1, Row2|Rows]) :-
     maplist(list_tail, [Row1, Row2|Rows], Rest),
     rule_hallways(Rest).
 
-rule_hallways_2x2([[s,s],[s,s]]) :-
+rule_hallways_2x2([Row1, Row2]) :-
+    Row1 = [s,s],
+    Row2 = [s,s],
     !, fail.
 rule_hallways_2x2(_).
 
