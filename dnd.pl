@@ -311,6 +311,10 @@ print_element(Element) :-
     write('_'),
     !.
 
+print_element(r) :-
+    write('_'),
+    !.
+
 print_element(s) :-
     write('_'),
     !.
