@@ -161,8 +161,8 @@ dead_end([Row1, Row2, Row3]) :-
 % We don't have a terminating clause since it should fail when we reach []
 detect_chest([Head|_]) :-
     nonvar(Head),
-    !,
-    Head == c.
+    Head == c,
+    !.
 
 detect_chest([_|Tail]) :-
     detect_chest(Tail).
