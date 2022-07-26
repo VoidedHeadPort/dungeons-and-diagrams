@@ -13,9 +13,12 @@ dnd(RowCounts, ColCounts, Rows) :-
     %   For example, I often try to fill out the chest room before rows
     % - 5x5 rule for chests
     rule_chests(MegaRows),
-    % Build columns out of the Rows (instead of rows)
+    % - 3x3 rule for monsters
+    rule_dead_ends(MegaRows),
+    % - 1x8 rule for the rows and columns
+    %   Transpose the columns and process them like rows
     rule_lines(RowCounts, ColCounts, Rows),
-    % - 3x3 rule for monsters (and invalid dead ends)
+    % - 3x3 rule for invalid dead ends (and monsters again but that should be cheap)
     rule_dead_ends(MegaRows),
     % - 2x2 rule for invalid corridors
     rule_hallways(Rows).
