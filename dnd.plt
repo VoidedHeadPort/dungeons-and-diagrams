@@ -222,9 +222,27 @@ test(rule_chests_1_begin, nondet) :-
         [ c, r, r,D1|_],
         [ r, r, r,D2|_],
         [ r, r, r,D3|_],
-        [A4,B4,C4,D4|_]|
+        [A4,B4,C4, _|_]|
     _],
-    count(w, 6, [D1,D2,D3,D4,C4,B4,A4]).
+    count(w, 5, [D1,D2,D3,C4,B4,A4]).
+
+test(rule_chests_1_begin_unique, true(SetLength =:= AllLength)) :-
+    Board = [
+        [c,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    setof(MegaBoard, rule_chests(MegaBoard), SetMegaBoards),
+    findall(MegaBoard, rule_chests(MegaBoard), AllMegaBoards),
+    length(SetMegaBoards, SetLength),
+    length(AllMegaBoards, AllLength).
+    
 
 test(rule_chests_1_mid, nondet) :-
     Board = [
@@ -239,6 +257,23 @@ test(rule_chests_1_mid, nondet) :-
     ],
     build_mega_board(Board, MegaBoard),
     rule_chests(MegaBoard).
+
+test(rule_chests_1_mid_unique, true(SetLength =:= AllLength)) :-
+    Board = [
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,c,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    setof(MegaBoard, rule_chests(MegaBoard), SetMegaBoards),
+    findall(MegaBoard, rule_chests(MegaBoard), AllMegaBoards),
+    length(SetMegaBoards, SetLength),
+    length(AllMegaBoards, AllLength).
 
 test(rule_chests_2_begin_end, nondet) :-
     Board = [
@@ -266,6 +301,23 @@ test(rule_chests_2_begin_end, nondet) :-
     count(w, 5, [D1,D2,D3,A4,B4,C4]),
     count(w, 5, [F5,G5,H5,E6,E7,E8]).
 
+test(rule_chests_2_begin_end_unique, true(SetLength =:= AllLength)) :-
+    Board = [
+        [c,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,c]
+    ],
+    build_mega_board(Board, MegaBoard),
+    setof(MegaBoard, rule_chests(MegaBoard), SetMegaBoards),
+    findall(MegaBoard, rule_chests(MegaBoard), AllMegaBoards),
+    length(SetMegaBoards, SetLength),
+    length(AllMegaBoards, AllLength).
+
 test(rule_chests_puzzle_1_1, nondet) :-
     Board = [
         [_,_,_,_,_,_,_,_],
@@ -290,91 +342,40 @@ test(rule_chests_puzzle_1_1, nondet) :-
         [w,w,w,_,_,_,_,_]
     ].
 
-test(rule_chests_puzzle_1_1_reduced_cols, nondet) :-
+test(rule_chests_puzzle_1_1_unique, true(SetLength =:= AllLength)) :-
     Board = [
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,c,_,_],
-        [_,_,_,_],
-        [_,_,_,_]
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,c,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_]
     ],
     build_mega_board(Board, MegaBoard),
-    rule_chests(MegaBoard),
-    Board = [
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,w,w,_],
-        [r,r,r,w],
-        [r,c,r,w],
-        [r,r,r,w],
-        [w,w,w,_]
-    ].
+    setof(MegaBoard, rule_chests(MegaBoard), SetMegaBoards),
+    findall(MegaBoard, rule_chests(MegaBoard), AllMegaBoards),
+    length(SetMegaBoards, SetLength),
+    length(AllMegaBoards, AllLength).
 
-test(rule_chests_puzzle_1_1_reduced_cols_further, nondet) :-
-    Board = [
-        [_,_,_],
-        [_,_,_],
-        [_,_,_],
-        [_,_,_],
-        [_,_,_],
-        [_,c,_],
-        [_,_,_],
-        [_,_,_]
-    ],
-    build_mega_board(Board, MegaBoard),
-    rule_chests(MegaBoard),
-    Board = [
-        [_,_,_],
-        [_,_,_],
-        [_,_,_],
-        [_,w,w],
-        [r,r,r],
-        [r,c,r],
-        [r,r,r],
-        [w,w,w]
-    ].
+test(detect_chest) :-
+    detect_chest([_,_,_,_,c,_,_,_,_]).
 
-test(rule_chests_puzzle_1_1_reduced_cols_rows, nondet) :-
-    Board = [
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,c,_,_],
-        [_,_,_,_],
-        [_,_,_,_]
-    ],
-    build_mega_board(Board, MegaBoard),
-    rule_chests(MegaBoard),
-    Board = [
-        [_,_,_,_],
-        [_,w,w,_],
-        [r,r,r,w],
-        [r,c,r,w],
-        [r,r,r,w],
-        [w,w,w,_]
-    ].
+test(detect_chest_empty, fail) :-
+    detect_chest([_,_,_,_,_,_,_,_,_]).
 
-test(rule_chests_puzzle_1_1_reduced_cols_rows_further, nondet) :-
+test(chest_room, true(Length =:= 1)) :-
     Board = [
-        [_,_,_,_],
-        [_,_,_,_],
-        [_,c,_,_],
-        [_,_,_,_],
-        [_,_,_,_]
+        [w,w,w,w,w,w],
+        [s,w,w,w,w,w],
+        [s,w,r,r,r,w],
+        [s,w,r,c,r,w],
+        [s,s,r,r,r,w],
+        [s,w,w,w,w,w]
     ],
-    build_mega_board(Board, MegaBoard),
-    rule_chests(MegaBoard),
-    Board = [
-        [_,w,w,_],
-        [r,r,r,w],
-        [r,c,r,w],
-        [r,r,r,w],
-        [w,w,w,_]
-    ].
+    findall(Board, chest_room(Board), Boards),
+    length(Boards, Length).
 
 
 :- end_tests(chests).
@@ -412,37 +413,39 @@ test(rule_lines_2x2_m, all(Board == [
     ],
     rule_lines(RowCounts, ColCounts, Board).
 
-test(rule_lines_simple_case, nondet) :-
+test(rule_lines_simple_case, all(Board == [
+            [
+                [w,w,w,w,w,w,w,w],
+                [w,w,w,w,w,w,w,s],
+                [w,w,w,w,w,w,s,s],
+                [w,w,w,w,w,s,s,s],
+                [w,w,w,w,s,s,s,s],
+                [w,w,w,s,s,s,s,s],
+                [w,w,s,s,s,s,s,s],
+                [w,s,s,s,s,s,s,s]
+            ]
+        ])) :-
     RowCounts = [8,7,6,5,4,3,2,1],
     ColCounts = [8,7,6,5,4,3,2,1],
     build_board(8, 8, Board),
-    rule_lines(RowCounts, ColCounts, Board),
-    Board == [
-        [w,w,w,w,w,w,w,w],
-        [w,w,w,w,w,w,w,s],
-        [w,w,w,w,w,w,s,s],
-        [w,w,w,w,w,s,s,s],
-        [w,w,w,w,s,s,s,s],
-        [w,w,w,s,s,s,s,s],
-        [w,w,s,s,s,s,s,s],
-        [w,s,s,s,s,s,s,s]
-    ].
+    rule_lines(RowCounts, ColCounts, Board).
 
-test(rule_lines_worst_case, nondet) :-
+test(rule_lines_worst_case, all(Board == [
+            [
+                [s,s,s,s,s,s,s,w],
+                [s,s,s,s,s,s,w,w],
+                [s,s,s,s,s,w,w,w],
+                [s,s,s,s,w,w,w,w],
+                [s,s,s,w,w,w,w,w],
+                [s,s,w,w,w,w,w,w],
+                [s,w,w,w,w,w,w,w],
+                [w,w,w,w,w,w,w,w]
+            ]
+        ])) :-
     RowCounts = [1,2,3,4,5,6,7,8],
     ColCounts = [1,2,3,4,5,6,7,8],
     build_board(8, 8, Board),
-    rule_lines(RowCounts, ColCounts, Board),
-    Board == [
-        [s,s,s,s,s,s,s,w],
-        [s,s,s,s,s,s,w,w],
-        [s,s,s,s,s,w,w,w],
-        [s,s,s,s,w,w,w,w],
-        [s,s,s,w,w,w,w,w],
-        [s,s,w,w,w,w,w,w],
-        [s,w,w,w,w,w,w,w],
-        [w,w,w,w,w,w,w,w]
-    ].
+    rule_lines(RowCounts, ColCounts, Board).
 
 :- end_tests(lines).
 
@@ -491,27 +494,57 @@ test(rule_dead_ends_monster) :-
     build_mega_board(Board, MegaBoard),
     rule_dead_ends(MegaBoard).
 
+test(rule_dead_ends_space, fail) :-
+    Board = [
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,w,_],
+        [_,_,_,_,_,w,s,w],
+        [_,_,_,_,_,_,s,_],
+        [_,_,_,_,_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_dead_ends(MegaBoard).
+
+test(rule_dead_ends_space_monster, fail) :-
+    Board = [
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,_,_],
+        [_,_,_,_,_,_,w,_],
+        [_,_,_,_,_,w,s,w],
+        [_,_,_,_,_,_,m,_],
+        [_,_,_,_,_,_,_,_]
+    ],
+    build_mega_board(Board, MegaBoard),
+    rule_dead_ends(MegaBoard).
+
 :- end_tests(dead_ends).
 
 
 :- begin_tests(hallways).
 
-test(rule_hallways_valid, nondet) :-
-    Rows = [
+test(rule_hallways_valid) :-
+    Board = [
         [w,w,s,m],
         [m,w,s,w],
         [s,w,s,w],
         [s,s,s,w]
     ],
-    rule_hallways(Rows).
+    %setof(Board, rule_hallways(Board), Boards),
+    findall(Board, rule_hallways(Board), Boards),
+    length(Boards, 1).
 
 test(rule_hallways_invalid, fail) :-
-    Rows = [
+    Board = [
         [w,w,s,m],
         [w,s,s,w],
         [w,s,s,w],
         [w,w,w,w]
     ],
-    rule_hallways(Rows).
+    rule_hallways(Board).
 
 :- end_tests(hallways).

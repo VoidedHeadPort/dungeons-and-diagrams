@@ -1,2 +1,4 @@
-dnd.txt
+*.txt
+*.log
+
 dnd_solutions.pl
