@@ -134,27 +134,10 @@ dead_end([Row1, Row2, Row3]) :-
     !.
 
 dead_end([Row1, Row2, Row3]) :-
-    Row1 = [_,s,_|_],
-    Row2 = [w,_,w|_],
-    Row3 = [_,w,_|_],
-    !.
-
-dead_end([Row1, Row2, Row3]) :-
-    Row1 = [_,w,_|_],
-    Row2 = [w,_,s|_],
-    Row3 = [_,w,_|_],
-    !.
-
-dead_end([Row1, Row2, Row3]) :-
-    Row1 = [_,w,_|_],
-    Row2 = [w,_,w|_],
-    Row3 = [_,s,_|_],
-    !.
-
-dead_end([Row1, Row2, Row3]) :-
-    Row1 = [_,w,_|_],
-    Row2 = [s,_,w|_],
-    Row3 = [_,w,_|_],
+    Row1 = [_,N,_|_],
+    Row2 = [W,_,E|_],
+    Row3 = [_,S,_|_],
+    count(w, 3, [N,E,S,W]),
     !.
 
 
