@@ -2,6 +2,9 @@
 
 
 solve_puzzle(Code) :-
+    solve_puzzle(Code, _).
+
+solve_puzzle(Code, Board) :-
     puzzle(Code, Name, RowCounts, ColCounts, Board),
     dnd(RowCounts, ColCounts, Board),
     print_board(Code, Name, RowCounts, ColCounts, Board).
