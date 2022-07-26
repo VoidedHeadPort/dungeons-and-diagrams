@@ -201,46 +201,57 @@ chest_zone(false, false, [Row1, Row2, Row3, Row4, Row5|_], [D4]) :-
     Row4 = [ _, _, _,D4, _|_],
     Row5 = [ _, _, _, _, _|_].
 
-chest_room([Row1, Row2, Row3, Row4, Row5|_]) :-
-    Row1 = [_, B1,C1,D1,_|_],
+chest_room(Rows) :-
+    chest_room(true, Rows).
+
+% chest_room(IsFirstRow, Rows)
+chest_room(_, [Row1, Row2, Row3, Row4, Row5|_]) :-
+    Row1 = [ _,B1,C1,D1, _|_],
     Row2 = [A2,B2,C2,D2,E2|_],
     Row3 = [A3,B3,C3,D3,E3|_],
     Row4 = [A4,B4,C4,D4,E4|_],
-    Row5 = [_, B5,C5,D5,_|_],
+    Row5 = [ _,B5,C5,D5, _|_],
     detect_chest([B2,C2,D2,B3,C3,D3,B4,C4,D4]),
     count(r, 8, [B2,C2,D2,B3,C3,D3,B4,C4,D4]),
     count(w, 11, [B1,C1,D1,E2,E3,E4,D5,C5,B5,A4,A3,A2]).
 
-chest_room([Row1, Row2, Row3, Row4, Row5|Rows]) :-
-    Row1 = [_, _, _, _, _|_],
-    Row2 = [_, _, _, _, _|_],
-    Row3 = [_, B3,C3,D3,_|_],
-    Row4 = [_, B4,C4,D4,_|_],
-    Row5 = [_, _, _, _, _|_],
-    detect_chest([B3,C3,D3,B4,C4,D4]),
-    chest_room([Row2, Row3, Row4, Row5|Rows]).
-
-chest_room([Row1, Row2, Row3, Row4, Row5|Rows]) :-
-    Row1 = [_, _, _, _, _|_],
-    Row2 = [_, _, C2,D2,_|_],
-    Row3 = [_, _, C3,D3,_|_],
-    Row4 = [_, _, C4,D4,_|_],
-    Row5 = [_, _, _, _, _|_],
+chest_room(true, [Row1, Row2, Row3, Row4, Row5|Rows]) :-
+    Row1 = [ _, _, _, _, _|_],
+    Row2 = [ _, _,C2,D2, _|_],
+    Row3 = [ _, _,C3,D3, _|_],
+    Row4 = [ _, _,C4,D4, _|_],
+    Row5 = [ _, _, _, _, _|_],
     detect_chest([C2,D2,C3,D3,C4,D4]),
     maplist(list_tail, [Row1, Row2, Row3, Row4, Row5|Rows], Rest),
-    chest_room(Rest).
+    chest_room(true, Rest).
+
+chest_room(_, [Row1, Row2, Row3, Row4, Row5|Rows]) :-
+    Row1 = [ _, _, _, _, _|_],
+    Row2 = [ _, _, _, _, _|_],
+    Row3 = [ _,B3,C3,D3, _|_],
+    Row4 = [ _,B4,C4,D4, _|_],
+    Row5 = [ _, _, _, _, _|_],
+    detect_chest([B3,C3,D3,B4,C4,D4]),
+    chest_room(false, [Row2, Row3, Row4, Row5|Rows]).
 
 
-rule_hallways([_]).
-rule_hallways([[_]|_]).
-rule_hallways([Row1, Row2|Rows]) :-
+rule_hallways(Rows) :-
+    rule_hallways(true, Rows).
+
+rule_hallways(IsFirstRow, [Row1, Row2|Rows]) :-
     Row1 = [A1,B1|_],
     Row2 = [A2,B2|_],
+    !,
     rule_hallways_2x2([[A1,B1],[A2,B2]]),
-    rule_hallways([Row2|Rows]),
+    rule_hallways(false, [Row2|Rows]),
     % Remove the first element from each Row in Rows.
-    maplist(list_tail, [Row1, Row2|Rows], Rest),
-    rule_hallways(Rest).
+    (   IsFirstRow == true
+    ->  maplist(list_tail, [Row1, Row2|Rows], Tail),
+        rule_hallways(IsFirstRow, Tail)
+    ;   true
+    ).
+
+rule_hallways(_, _).
 
 rule_hallways_2x2([Row1, Row2]) :-
     Row1 = [s,s],
